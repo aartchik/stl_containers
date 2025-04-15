@@ -6,12 +6,11 @@
 
 
 int main()
-{   
-    container::List<int> arr(10, -7);
-    std::cout << arr.size() << " ";
-    int i = 1;
-    for (auto it = arr.begin(); it != arr.end(); ++it, ++i)
+{
+    container::List<std::string> arr(3, "string");
+    arr.insert(++arr.begin(), "a");
+    for (auto it = arr.begin(); it != arr.end(); ++it)
     {
-        std::cout << i << " " << *it << "    ";
+        std::cout << *it << " ";
     }
 }

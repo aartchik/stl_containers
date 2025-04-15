@@ -37,64 +37,109 @@ namespace container
         Node *head;
         Node *tail;
 
-        template <bool IsConst>
-        class base_iterator
+        class iterator
         {
         public:
-            using pointer_type = typename std::conditional<IsConst, const T *, T *>::type;
-            using reference_type = typename std::conditional<IsConst, const T &, T &>::type;
+            using pointer_type = T*;
+            using reference_type = T&;
 
-            base_iterator() : current(nullptr) {}
-            base_iterator(Node *ptr) : current(ptr) {}
-            base_iterator(const base_iterator &other) : current(other.current) {}
-            base_iterator &operator=(const base_iterator &) = default;
+            iterator() : current(nullptr) {}
+            iterator(Node *ptr) : current(ptr) {}
+            iterator(const iterator &other) : current(other.current) {}
+            iterator(const const_iterator &other) : current(other.current) {}
+
+            operator Node *() const { return current; }
 
             reference_type operator*() const { return current->data_; }
             pointer_type operator->() const { return &current->data_; }
-            base_iterator &operator++()
+            iterator &operator++()
             {
                 current = current->next;
                 return *this;
             }
-            base_iterator operator++(int)
+            iterator operator++(int)
             {
-                base_iterator copy = *this;
+                iterator copy = *this;
                 ++(*this);
                 return copy;
             }
-            base_iterator &operator--()
+            iterator &operator--()
             {
                 current = current->prev;
                 return *this;
             }
-            base_iterator operator--(int)
+            iterator operator--(int)
             {
-                base_iterator copy = *this;
+                iterator copy = *this;
                 --(*this);
                 return copy;
             }
 
-            bool operator==(const base_iterator &other) const { return (current == other.current); }
-            bool operator!=(const base_iterator &other) const { return !(*this == other); }
+            bool operator==(const iterator &other) const { return (current == other.current); }
+            bool operator!=(const iterator &other) const { return !(*this == other); }
+
+            Node *current;
+        private:
+        };
+
+        class const_iterator
+        {
+        public:
+            using pointer_type = const T*;
+            using reference_type = const T&;
+
+            const_iterator() : current(nullptr) {}
+            const_iterator(Node *ptr) : current(ptr) {}
+            const_iterator(const iterator &other) : current(other.current) {}
+            const_iterator(const const_iterator &other) : current(other.current) {}
+
+            operator Node*() const { return current; }
+
+            reference_type operator*() const { return current->data_; }
+            pointer_type operator->() const { return &current->data_; }
+            const_iterator &operator++()
+            {
+                current = current->next;
+                return *this;
+            }
+            const_iterator operator++(int)
+            {
+                const_iterator copy = *this;
+                ++(*this);
+                return copy;
+            }
+            const_iterator &operator--()
+            {
+                current = current->prev;
+                return *this;
+            }
+            const_iterator operator--(int)
+            {
+                const_iterator copy = *this;
+                --(*this);
+                return copy;
+            }
+
+            bool operator==(const const_iterator &other) const { return (current == other.current); }
+            bool operator!=(const const_iterator &other) const { return !(*this == other); }
 
         private:
             Node *current;
         };
 
     public:
-        using iterator = base_iterator<false>;
-        using const_iterator = base_iterator<true>;
+
         //using reverse_iterator = std::reverse_iterator<iterator>;
         //using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
         List(size_t count);
-        List(size_t count, const T& value);
+        List(size_t count, const_reference value);
 
         template <class InputIt>
         List(InputIt first, InputIt last);
 
         List(const List &other);
-        List &operator=(List other);
+        List& operator=(List other);
         ~List();
 
         // Element access
@@ -117,6 +162,9 @@ namespace container
         // Modifers
         void clear() noexcept;
         iterator insert(const_iterator pos, const_reference value);
+        iterator insert(const_iterator pos, size_type count, const T &value);
+        iterator erase(const_iterator pos);
+        iterator erase(const_iterator first, const_iterator last);
     };
 
     template <typename T>
@@ -250,15 +298,15 @@ namespace container
 
        // try
         //{
-            Node* new_node = Node(nullptr, value);
-            if (pos == begin())
+            Node* new_node = new Node(nullptr, value);
+            if (pos == cbegin())
             {
                 new_node->next = head;
                 if (head)
                     head->prev = new_node;
                 head = new_node;
             }
-            else if (pos == end())
+            else if (pos == cend())
             {
                 tail->next = new_node;
                 new_node->prev = tail;
@@ -278,7 +326,16 @@ namespace container
         //}
         //catch (std::exception& )
         //{
+        }
 
+        template <typename T>
+        typename List<T>::iterator List<T>::erase(const_iterator pos)
+        {
+            if (pos == cbegin())
+            {
+                head->next->prev = nullptr;
+                
+            }
         }
 }
 
