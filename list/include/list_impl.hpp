@@ -1,171 +1,11 @@
 #ifndef LIST_IMPL_HPP_
 #define LIST_IMPL_HPP_
 
-#include <exception>
-#include <cstddef>
+#include "list.hpp"
 
 namespace container
 {
 
-    template <typename T>
-    class List
-    {
-
-    public:
-        using value_type = T;
-        using reference = value_type &;
-        using const_reference = const value_type &;
-        using pointer = value_type *;
-        using const_pointer = const value_type *;
-        using size_type = size_t;
-
-    private:
-        class Node
-        {
-        public:
-            Node *prev;
-            value_type data_;
-            Node *next;
-            Node(Node *prev, const_reference value);
-            Node(const Node &other);
-            Node &operator=(Node other);
-            Node *operator->();
-            Node &operator*();
-        };
-
-        size_t size_;
-        Node *head;
-        Node *tail;
-
-        class iterator
-        {
-        public:
-            using pointer_type = T*;
-            using reference_type = T&;
-
-            iterator() : current(nullptr) {}
-            iterator(Node *ptr) : current(ptr) {}
-            iterator(const iterator &other) : current(other.current) {}
-            iterator(const const_iterator &other) : current(other.current) {}
-
-            operator Node *() const { return current; }
-
-            reference_type operator*() const { return current->data_; }
-            pointer_type operator->() const { return &current->data_; }
-            iterator &operator++()
-            {
-                current = current->next;
-                return *this;
-            }
-            iterator operator++(int)
-            {
-                iterator copy = *this;
-                ++(*this);
-                return copy;
-            }
-            iterator &operator--()
-            {
-                current = current->prev;
-                return *this;
-            }
-            iterator operator--(int)
-            {
-                iterator copy = *this;
-                --(*this);
-                return copy;
-            }
-
-            bool operator==(const iterator &other) const { return (current == other.current); }
-            bool operator!=(const iterator &other) const { return !(*this == other); }
-
-            Node *current;
-        private:
-        };
-
-        class const_iterator
-        {
-        public:
-            using pointer_type = const T*;
-            using reference_type = const T&;
-
-            const_iterator() : current(nullptr) {}
-            const_iterator(Node *ptr) : current(ptr) {}
-            const_iterator(const iterator &other) : current(other.current) {}
-            const_iterator(const const_iterator &other) : current(other.current) {}
-
-            operator Node*() const { return current; }
-
-            reference_type operator*() const { return current->data_; }
-            pointer_type operator->() const { return &current->data_; }
-            const_iterator &operator++()
-            {
-                current = current->next;
-                return *this;
-            }
-            const_iterator operator++(int)
-            {
-                const_iterator copy = *this;
-                ++(*this);
-                return copy;
-            }
-            const_iterator &operator--()
-            {
-                current = current->prev;
-                return *this;
-            }
-            const_iterator operator--(int)
-            {
-                const_iterator copy = *this;
-                --(*this);
-                return copy;
-            }
-
-            bool operator==(const const_iterator &other) const { return (current == other.current); }
-            bool operator!=(const const_iterator &other) const { return !(*this == other); }
-
-        private:
-            Node *current;
-        };
-
-    public:
-
-        //using reverse_iterator = std::reverse_iterator<iterator>;
-        //using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-
-        List(size_t count);
-        List(size_t count, const_reference value);
-
-        template <class InputIt>
-        List(InputIt first, InputIt last);
-
-        List(const List &other);
-        List& operator=(List other);
-        ~List();
-
-        // Element access
-
-        reference front();
-        reference back();
-        const_reference front() const;
-        const_reference back() const;
-
-        // Iterators
-        iterator begin() noexcept;
-        iterator end() noexcept;
-        const_iterator cbegin() const noexcept;
-        const_iterator cend() const noexcept;
-
-        // Capacity
-        bool empty() const noexcept;
-        size_t size() const noexcept;
-
-        // Modifers
-        void clear() noexcept;
-        iterator insert(const_iterator pos, const_reference value);
-        iterator insert(const_iterator pos, size_type count, const T &value);
-        iterator erase(const_iterator pos);
-        iterator erase(const_iterator first, const_iterator last);
-    };
 
     template <typename T>
     List<T>::Node::Node(Node *prev, const_reference value): prev(prev), data_(value), next(nullptr) {}
@@ -201,6 +41,8 @@ namespace container
         if (count == 0)
             return;
         
+
+        
         head = new Node(nullptr, value_type());
         tail = head;
         for (size_t index = 1; index < size_; index++)
@@ -208,6 +50,8 @@ namespace container
             tail->next = new Node(tail, value_type());
             tail = tail->next;
         }
+        
+
     }
 
 
@@ -310,7 +154,7 @@ namespace container
             {
                 tail->next = new_node;
                 new_node->prev = tail;
-                tail = new_node->next;
+                tail = new_node;
             }
             else
             {

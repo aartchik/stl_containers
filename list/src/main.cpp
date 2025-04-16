@@ -7,10 +7,9 @@
 
 int main()
 {
-    container::List<std::string> arr(3, "string");
-    arr.insert(++arr.begin(), "a");
-    for (auto it = arr.begin(); it != arr.end(); ++it)
-    {
-        std::cout << *it << " ";
-    }
+    container::List<std::string> arr(0);
+    arr.insert(arr.end(), "a");
+
+
+    return 0;  
 }
