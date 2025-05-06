@@ -38,7 +38,8 @@ namespace containers {
     template <bool IsConst>
     vector<T, Allocator>::base_iterator<IsConst>& vector<T, Allocator>::base_iterator<IsConst>::operator++() 
     {
-        return base_iterator<false>(++value);
+        ++value;
+        return *this;
     }
 
     template <typename T,  typename Allocator>
@@ -54,7 +55,8 @@ namespace containers {
     template <bool IsConst>
     vector<T, Allocator>::template base_iterator<IsConst>& vector<T, Allocator>::base_iterator<IsConst>::operator--()
     {
-        return --value;
+        --value;
+        return *this;
     }
 
     template <typename T,  typename Allocator>
@@ -70,14 +72,14 @@ namespace containers {
     template <bool IsConst>
     bool vector<T, Allocator>::base_iterator<IsConst>::operator==(const vector<T, Allocator>::base_iterator<IsConst>& other) const
     {
-        return this == &other;
+        return (value == other.value);
     }
 
     template <typename T,  typename Allocator>
     template <bool IsConst>
     bool vector<T, Allocator>::base_iterator<IsConst>::operator!=(const vector<T, Allocator>::base_iterator<IsConst>& other) const
     {
-        return !(this == &other);
+        return !(value == other.value);
     }
 
     template <typename T, typename Allocator>
@@ -182,7 +184,7 @@ namespace containers {
 
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::size_type vector<T, Allocator>::size() const
+    typename vector<T, Allocator>::size_type vector<T, Allocator>::size() const
     {
         return size_;
     }
@@ -198,7 +200,7 @@ namespace containers {
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::size_type vector<T, Allocator>::capacity() const 
+    typename vector<T, Allocator>::size_type vector<T, Allocator>::capacity() const 
     {
         return capacity_;
     }
@@ -335,7 +337,7 @@ namespace containers {
 
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::reference vector<T, Allocator>::at(size_type index)
+    typename vector<T, Allocator>::reference vector<T, Allocator>::at(size_type index)
     {
         if (index < 0 || index >= size_)
             throw std::out_of_range("");
@@ -343,7 +345,7 @@ namespace containers {
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::const_reference  vector<T, Allocator>::at(size_type index) const
+    typename vector<T, Allocator>::const_reference  vector<T, Allocator>::at(size_type index) const
     {
         if (index < 0 || index >= size_)
             throw std::out_of_range("");
@@ -351,37 +353,37 @@ namespace containers {
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::reference vector<T, Allocator>::operator[](size_type index)
+    typename vector<T, Allocator>::reference vector<T, Allocator>::operator[](size_type index)
     {
         return array_[index];
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::const_reference  vector<T, Allocator>::operator[](size_type index) const
+    typename vector<T, Allocator>::const_reference  vector<T, Allocator>::operator[](size_type index) const
     {
         return array_[index];
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::reference  vector<T, Allocator>::front()
+    typename vector<T, Allocator>::reference  vector<T, Allocator>::front()
     {
         return *array_;
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::const_reference  vector<T, Allocator>::front() const
+    typename vector<T, Allocator>::const_reference  vector<T, Allocator>::front() const
     {
         return *array_;
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::reference  vector<T, Allocator>::back()
+    typename vector<T, Allocator>::reference  vector<T, Allocator>::back()
     {
         return *(array_ + size_ - 1);
     }
 
     template <typename T, typename Allocator>
-    vector<T, Allocator>::const_reference  vector<T, Allocator>::back() const
+    typename vector<T, Allocator>::const_reference  vector<T, Allocator>::back() const
     {
         return *(array_ + size_ - 1);
     }

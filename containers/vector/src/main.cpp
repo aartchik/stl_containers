@@ -69,11 +69,20 @@ int main()
     arr2.resize(25, "resize");
 
     vector <std::string, allocator<std::string>> test(5);
+    int i = 0;
 
-    for (auto it = test.begin(); it != test.end(); ++it)
+    for (auto it = test.begin(); it != test.end(); ++it, ++i)
+    {
+        std::cout << i << " " << *it << std::endl;
+    }
+    std::cout << std::endl;
+
+    /*for (auto it = --test.end(); it != --test.begin(); --it)
     {
         std::cout << *it << " ";
     }
+    std::cout << std::endl;*/
+
     
 
 
