@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <algorithm>
 #include <type_traits>
+#include "allocator.hpp"
 
 namespace containers {
 
@@ -26,18 +27,19 @@ namespace containers {
     private:
         size_type capacity_;
         size_type size_;
-        pointer array_;
         Allocator alloc; 
+        pointer array_;
 
     template <bool IsConst>
     class base_iterator
     {
-
+        friend class vector<T, Allocator>;
         using pointer_type = typename std::conditional<IsConst, const T*, T*>::type;
         using reference_type = typename std::conditional<IsConst, const T&, T&>::type;
         
         base_iterator(const_pointer  ptr);
 
+    public:
         reference_type operator*() const;
         pointer_type operator->() const;
 
@@ -50,7 +52,7 @@ namespace containers {
         bool operator==(const base_iterator& other) const;
         bool operator!=(const base_iterator& other) const;
 
-
+    private:
         operator base_iterator<true>() const { return base_iterator<true>(value); }
         T* value;
     };
@@ -62,15 +64,16 @@ namespace containers {
 
 
     public:
-        vector() = default;
+        vector();
         vector(size_type n);
+        vector(size_type n, const_reference value);
         //vector(const vector &other);
         //vector &operator=(vector other);
         ~vector();
 
-        vector& operator=(const vector& other);
-        vector& operator=(vector&& other);
-        vector& operator=(std::initializer_list<value_type> ilist);
+        //vector& operator=(const vector& other);
+        //vector& operator=(vector&& other);
+        //vector& operator=(std::initializer_list<value_type> ilist);
         
 
     //Element access
@@ -100,7 +103,7 @@ namespace containers {
     //capacity
         bool empty() const;
         size_type size() const;
-        void reserve(size_type n);
+        void reserve(size_type newcap);
         size_type capacity() const;
         void shrink_to_fit();
 
@@ -121,14 +124,11 @@ namespace containers {
         void resize(size_type n);
         void resize(size_type n, const_reference value);
 
-
-
-
-       // void pop_back();
 };
 
 }
 #include "vector_impl.hpp"
+#include "allocator.hpp"
 
 #endif  // vector_H
 

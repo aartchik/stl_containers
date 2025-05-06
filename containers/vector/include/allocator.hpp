@@ -6,13 +6,17 @@
 template <typename T>
 struct allocator
 {
-    T* allocate(size_t count)
+
+    using value_type = T;
+    using pointer = value_type*;
+
+    pointer allocate(size_t count)
     {
 //        return reinterpret_cast<T*>(new char[sizeof(T) * count]);
-        return operator new(sizeof(T) * count);
+        return static_cast<pointer>(operator new(sizeof(T) * count));
     }
     
-    void deallocate(T* ptr, size_t)
+    void deallocate(pointer ptr, size_t)
     {
     //    delete[] reinterpret_cast<char*>(ptr);
         operator delete(ptr);
@@ -32,6 +36,8 @@ struct allocator
 
     template <typename U>
     allocator(allocator<U>) {}
+
+    allocator() = default;
 
     template <typename U>
     struct rebind
