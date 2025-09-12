@@ -16,9 +16,8 @@ int main()
 
     while (!arr.empty())
     {
-        std::cout << arr.top() << std::endl;
+        std::cout << arr.top() << " " << arr.size() << std::endl;
         arr.pop();
-
     }
 
 

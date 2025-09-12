@@ -1,7 +1,6 @@
 #ifndef PRIORITY_QUEUE_IMPL_HPP
 #define PRIORITY_QUEUE_IMPL_HPP
-
-#include "priority_queue.hpp"
+#include <utility> 
 
 template <typename T>
 bool priority_queue<T>::empty() const
@@ -53,6 +52,8 @@ void priority_queue<T>::pop()
 template <typename T>
 void priority_queue<T>::siftDown(size_t n)
 {
+    if (n*2 + 1 >= array_.size())
+        return;
     if (array_[n*2 + 1] <= array_[n] || array_[n*2+2] <= array_[n])
     {
         if (array_[n * 2 + 1] <= array_[n * 2 + 2])
