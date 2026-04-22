@@ -1,8 +1,8 @@
-CXX = g++
-CXXFLAGS = -O2 -Wall -Werror -std=c++14 -Iinclude
+CXX = g++-11
+CXXFLAGS = -O2 -Wall -Werror -std=c++20 -Iinclude
 LDFLAGS = 
 
-EXE = list
+EXE = deque
 SRCDIR = src
 OBJDIR = obj
 

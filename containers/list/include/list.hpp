@@ -19,67 +19,64 @@ namespace container
         using const_pointer = const value_type*;
         using size_type = size_t;
 
-    private:
-        class Node
+    public:
+
+
+        struct base_Node
         {
+            friend class List;
+            base_Node* prev;
+            base_Node* next;
+            base_Node();
+            base_Node(base_Node* prev, base_Node* next);
+            base_Node(const base_Node& other) = default;
+        };
+
+        struct Node: base_Node
+        {
+            friend class List<T>;
         public:
-            Node* prev;
             value_type data_;
-            Node* next;
-            Node(Node* prev, const_reference value);
+            explicit Node(const_reference value);
             Node(const Node& other);
             Node& operator=(Node other);
-            Node* operator->();
-            Node& operator*();
+
         };
 
         size_t size_;
-        Node* head;
-        Node* tail;
+        base_Node fakeNode;
+
+
 
         template <bool IsConst>
         class base_iterator
         {
+            friend List<T>;
+            using base_ptr = typename std::conditional<IsConst, const base_Node*, base_Node*>::type;
             using pointer_type = typename std::conditional<IsConst, const T*, T*>::type;
             using reference_type = typename std::conditional<IsConst, const T&, T&>::type;
         public:
 
-            base_iterator() : current(nullptr) {}
-            base_iterator(Node* ptr) : current(ptr) {}
-            base_iterator(const base_iterator& other) : current(other.current) {}
-            reference_type operator*() const { return current->data_; }
-            pointer_type operator->() const { return &current->data_; }
-            base_iterator& operator++()
-            {
-                current = current->next;
-                return *this;
-            }
-            base_iterator operator++(int)
-            {
-                base_iterator copy = *this;
-                ++(*this);
-                return copy;
-            }
-            base_iterator& operator--()
-            {
-                current = current->prev;
-                return *this;
-            }
-            base_iterator operator--(int)
-            {
-                base_iterator copy = *this;
-                --(*this);
-                return copy;
-            }
+            explicit base_iterator(const base_Node* ptr);
+            
+            reference_type operator*() const;
+            pointer_type operator->() const;
 
-            bool operator==(const base_iterator& other) const { return (current == other.current); }
-            bool operator!=(const base_iterator& other) const { return !(*this == other); }
+            base_iterator& operator++();
+            base_iterator operator++(int);
 
-            operator base_iterator<true>() const {return base_iterator<true>(current);}
-            operator Node*() const { return current;}
+            base_iterator& operator--();
+            base_iterator operator--(int);
+
+
+            bool operator==(const base_iterator& other) const;
+            bool operator!=(const base_iterator& other) const;
+
+            operator base_iterator<true>() const { return base_iterator<true>(current); }
+            //explicit operator Node*() const { return static_cast<Node*>(current);}
 
         private:
-            Node* current;
+            base_Node* current;
         };
 
     public:
@@ -90,8 +87,10 @@ namespace container
         //using reverse_iterator = std::reverse_iterator<iterator>;
         //using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-        List(size_t count);
-        List(size_t count, const_reference value);
+
+        List();
+        explicit List(size_t count);
+        explicit List(size_t count, const_reference value);
 
         template <class InputIt>
         List(InputIt first, InputIt last);
@@ -108,8 +107,8 @@ namespace container
         const_reference back() const;
 
         // Iterators
-        iterator begin() noexcept;
-        iterator end() noexcept;
+        iterator begin() const noexcept;
+        iterator end()  const noexcept;
         const_iterator cbegin() const noexcept;
         const_iterator cend() const noexcept;
 
@@ -125,5 +124,5 @@ namespace container
         iterator erase(const_iterator first, const_iterator last);
     };
 }
-
+#include "list_impl.hpp"
 #endif 

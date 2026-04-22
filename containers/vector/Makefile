@@ -1,8 +1,8 @@
 CXX = g++-11
-CXXFLAGS = -O2 -Wall -Werror -std=c++23 -Iinclude
+CXXFLAGS = -O2 -Wall -Werror -std=c++20 -Iinclude
 LDFLAGS = 
 
-EXE = priority_queue
+EXE = vector
 SRCDIR = src
 OBJDIR = obj
 
