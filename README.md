@@ -1,23 +1,12 @@
 # STL Containers
 
-Учебный репозиторий с реализациями контейнеров и структур данных на C++ в библиотечном стиле.
-Цель проекта — постепенно собрать собственный набор STL-подобных контейнеров с раздельной структурой `include/` и `src/`, шаблонными интерфейсами и примерами использования.
+C++ containers and data structures implemented in a library-style layout.
 
-## Текущее состояние
-
-Репозиторий собран из нескольких рабочих веток в одну общую структуру.
-Не все контейнеры завершены, но проект уже приведён к единому layout.
-
-Сейчас в репозитории есть:
-
-- `containers/vector` — реализация `vector`
-- `containers/list` — реализация двусвязного списка
-- `containers/deque` — заготовка под `deque`
-- `containers/unordered_map` — ранний прототип `unordered_map`
-
-## Структура проекта
+## Structure
 
 ```text
+adapters/
+  priority_queue/
 containers/
   vector/
   list/
@@ -25,27 +14,30 @@ containers/
   unordered_map/
 ```
 
-Для контейнеров используется библиотечная раскладка:
+Each container uses a library-style structure:
 
-- `include/` — заголовки и шаблонные реализации
-- `src/` — демонстрационные `main.cpp`
-- `Makefile` — локальная сборка конкретного контейнера
+- `include/` for headers and template implementation
+- `src/` for example entry points
+- `Makefile` for local build
 
-## Сборка
+## Implemented
 
-Сборка выполняется отдельно в каталоге нужного контейнера:
+- `adapters/priority_queue` — priority queue
+- `containers/vector` — vector
+- `containers/list` — doubly linked list
+
+## In Progress
+
+- `containers/deque`
+- `containers/unordered_map`
+
+## Build
+
+Build each module separately:
 
 ```bash
+cd adapters/priority_queue && make
 cd containers/vector && make
 cd containers/list && make
 cd containers/deque && make
 ```
-
-`unordered_map` пока находится в статусе прототипа и ещё не приведён к тому же уровню оформления, что остальные контейнеры.
-
-## Дальнейшая работа
-
-- расширить набор контейнеров и структур данных
-- довести интерфейсы до более полного STL-поведения
-- добавить копирование, перемещение и дополнительные модификаторы
-- заменить демонстрационные `main.cpp` на нормальные тесты
